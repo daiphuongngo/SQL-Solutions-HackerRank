@@ -14,6 +14,10 @@ This repository contains solutions of SQL HackerRank challenges which I had comp
 
 #### Employee Names
 
+![Employee Names p1](https://user-images.githubusercontent.com/70437668/140261903-cf736b9f-9726-4cd7-b05e-9a7c4e1c2c80.jpg)
+
+![Employee Names p2](https://user-images.githubusercontent.com/70437668/140261906-e1d124e2-e66d-42f4-8c67-ab87a0e6e6f0.jpg)
+
 Write a query that prints a list of employee names (i.e.: the name attribute) from the Employee table in alphabetical order. 
 ```
 SELECT NAME 
@@ -22,6 +26,10 @@ ORDER BY NAME;
 ```
 
 ### Employee Salaries
+
+![Employee Salaries p1](https://user-images.githubusercontent.com/70437668/140261914-ca6ac429-b1da-4f1c-be7d-f4416340b249.jpg)
+
+![Employee Salaries p2](https://user-images.githubusercontent.com/70437668/140261925-6160d4bb-fbd4-4f88-9769-9ee496085d2c.jpg)
 
 Write a query that prints a list of employee names (i.e.: the name attribute) for employees in Employee having a salary greater than  per month who have been employees for less than 10 months. Sort your result by ascending employee_id. 
 ```
@@ -32,6 +40,10 @@ ORDER BY EMPLOYEE_ID;
 
 ### Higher Than 75 Marks
 
+![Higher Than 75 Marks p1](https://user-images.githubusercontent.com/70437668/140261878-df8cf1d3-302c-45d2-811c-10cce321610b.jpg)
+
+![Higher Than 75 Marks p2](https://user-images.githubusercontent.com/70437668/140261882-235eed50-e7bb-4cde-a23d-efb3df3a787c.jpg)
+
 Query the Name of any student in STUDENTS who scored higher than  Marks. Order your output by the last three characters of each name. If two or more students both have names ending in the same last three characters (i.e.: Bobby, Robby, etc.), secondary sort them by ascending ID.
 ```
 SELECT NAME 
@@ -41,18 +53,24 @@ ORDER BY RIGHT(NAME, 3), ID ASC;
 ```
 
 ### Japanese Cities' Attributes
+
+![Japanese Cities' Attributes](https://user-images.githubusercontent.com/70437668/140261416-27156352-65e7-4840-8507-b944fbabea37.jpg)
 ```
 SELECT *
 FROM CITY
 WHERE COUNTRYCODE = 'JPN';
 ```
 
+
 ### Japanese Cities' Names
+
+![Japanese Cities' Names](https://user-images.githubusercontent.com/70437668/140261422-4ae36c9a-5dd7-4e25-8ccf-9187ed7689df.jpg)
 ```
 SELECT NAME
 FROM CITY
 WHERE COUNTRYCODE = 'JPN';
 ```
+
 
 ### Revising the Select Query I
 ```
@@ -72,6 +90,8 @@ WHERE
 ```
 
 ### Revising the Select Query II
+
+![Revising the Select Query II](https://user-images.githubusercontent.com/70437668/140261377-0d2c93af-146c-4a73-82fd-cf3fc7a47c0f.jpg)
 ```
 SELECT NAME
 FROM CITY
@@ -80,6 +100,8 @@ COUNTRYCODE = 'USA' AND POPULATION > 120000;
 ```
 
 ### Select All
+
+![Select All](https://user-images.githubusercontent.com/70437668/140261389-7ab4dddd-2cf5-4ee1-ab28-fc9063216603.jpg)
 ```
 ALTER TABLE CITY
 ADD POPULATION INT;
@@ -89,31 +111,50 @@ FROM CITY;
 ```
 
 ### Select By ID
+
+![Select By ID](https://user-images.githubusercontent.com/70437668/140261399-31ea2c30-c192-4dae-9e19-95de4139de02.jpg)
+
 ```
 SELECT *
 FROM CITY
 WHERE ID = 1661;
 ```
+
+
+
 ### Weather Observation Station 1
+
+![Weather Observation Station 1](https://user-images.githubusercontent.com/70437668/140261435-1439ffd7-ebdf-4e12-8da4-92c7876bd43b.jpg)
+
 ```
 SELECT CITY, STATE 
 FROM STATION;
 ```
 
+
 ### Weather Observation Station 3
+
+![Weather Observation Station 3](https://user-images.githubusercontent.com/70437668/140261446-125ed6d3-f04f-4474-90ee-a0e48cd40c91.jpg)
 ```
 SELECT DISTINCT(CITY) /* Print the results in any order, but exclude duplicates from the answer. */
 FROM STATION 
 WHERE (ID % 2) = 0; /* even ID number */
 ```
 
+
 ### Weather Observation Station 4
+
+![Weather Observation Station 4](https://user-images.githubusercontent.com/70437668/140261453-e3c7e5d3-39d7-48ff-9a07-9d03707b0be1.jpg)
+
 ```
 SELECT COUNT(CITY) - COUNT(DISTINCT CITY) 
 FROM STATION;
 ```
 
+
 ### Weather Observation Station 5
+
+![Weather Observation Station 5](https://user-images.githubusercontent.com/70437668/140261482-27ddcf85-c747-4f40-a6ec-f14feb7da2e4.jpg)
 
 Return the city with the longest name and the city with the shortest name (with city name sort order as a tie breaker).
 
@@ -128,7 +169,10 @@ ORDER BY LENGTH(CITY) DESC
 LIMIT 1;
 ```
 
+
 ### Weather Observation Station 6
+
+![Weather Observation Station 6](https://user-images.githubusercontent.com/70437668/140261505-5978dc3c-aafc-49f6-88ed-cf6d63a3e8be.jpg)
 
 Method 1
 ```
@@ -147,6 +191,8 @@ IN ('a','i','e','o','u');
 
 ### Weather Observation Station 7
 
+![Weather Observation Station 7](https://user-images.githubusercontent.com/70437668/140261799-6a7d1322-f203-46d3-b95a-20131d4289ee.jpg)
+
 Method 1
 ```
 SELECT DISTINCT CITY 
@@ -163,6 +209,9 @@ WHERE CITY REGEXP "^.*[aeiou]$"; /* test ending with vowels */
 ```
 
 ### Weather Observation Station 8
+
+![Weather Observation Station 8](https://user-images.githubusercontent.com/70437668/140261806-7c986b94-a52b-4b1b-b97c-2d2129b70469.jpg)
+
 ```
 SELECT DISTINCT CITY FROM STATION
 WHERE LEFT(CITY, 1) 
@@ -172,6 +221,8 @@ IN ('a','e','i','o','u');
 ```
 
 ### Weather Observation Station 9
+
+![Weather Observation Station 9](https://user-images.githubusercontent.com/70437668/140261826-74fff90f-26c6-4239-ac2f-87cdcfc3a702.jpg)
 
 Putting a ^ inside the closed brackets means something completely different than putting it outside the brackets. 
 
@@ -189,6 +240,8 @@ WHERE CITY REGEXP '^[^aeiou]';
 
 ### Weather Observation Station 10
 
+![Weather Observation Station 10](https://user-images.githubusercontent.com/70437668/140261851-c8a34519-3957-44ac-8d9c-a481fee59adf.jpg)
+
 Method 1
 ```
 SELECT DISTINCT CITY 
@@ -204,6 +257,8 @@ WHERE CITY NOT REGEXP '[aiueo]$'; /* do not end with vowels */
 ```
 
 ### Weather Observation Station 11
+
+![Weather Observation Station 11](https://user-images.githubusercontent.com/70437668/140261855-550cadcc-c06b-41bb-be41-666dc263704d.jpg)
 
 Method 1
 ```
@@ -225,6 +280,8 @@ OR RIGHT(CITY, 1) NOT IN ('a', 'e', 'i', 'o', 'u')
 ```
 
 ### Weather Observation Station 12
+
+![Weather Observation Station 12](https://user-images.githubusercontent.com/70437668/140261862-057d17ea-4134-4d7e-a10d-606bec9a2942.jpg)
 
 Method 1
 
