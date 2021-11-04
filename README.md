@@ -210,7 +210,7 @@ WHERE CITY REGEXP "^.*[aeiou]$"; /* test ending with vowels */
 
 ### Weather Observation Station 8
 
-![Weather Observation Station 8](https://user-images.githubusercontent.com/70437668/140261806-7c986b94-a52b-4b1b-b97c-2d2129b70469.jpg)
+![Weather Observation Station 8](https://user-images.githubusercontent.com/70437668/140275685-d284a4ef-686e-4e70-8bd0-f1772dee7cf0.jpg)
 
 ```
 SELECT DISTINCT CITY FROM STATION
