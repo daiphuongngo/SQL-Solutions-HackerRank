@@ -587,6 +587,8 @@ order by count(s.hacker_id) desc, s.hacker_id asc
 
 ### Average Population
 
+![Average Population](https://user-images.githubusercontent.com/70437668/140273609-fa6c5109-27a9-4efd-ac9a-d8b95c4f2675.jpg)
+
 Query the average population for all cities in CITY, rounded down to the nearest integer.
 ```
 SELECT FLOOR(AVG(POPULATION))
@@ -594,6 +596,8 @@ FROM CITY;
 ```
 
 ### Japan Population
+
+![Japan Population](https://user-images.githubusercontent.com/70437668/140273621-7287418f-4ded-4f55-b414-8d4b8ea3538a.jpg)
 
 Query the sum of the populations for all Japanese cities in CITY. The COUNTRYCODE for Japan is JPN.
 ```
@@ -604,6 +608,8 @@ WHERE COUNTRYCODE = 'JPN';
 
 ### Population Density Difference
 
+![Population Density Difference](https://user-images.githubusercontent.com/70437668/140273629-419a488d-dd49-4272-9377-b0e47bad0490.jpg)
+
 Query the difference between the maximum and minimum populations in CITY.
 ```
 SELECT MAX(POPULATION) - MIN(POPULATION)
@@ -611,6 +617,8 @@ FROM CITY;
 ```
 
 ### Revising Aggregations - Averages
+
+![Revising Aggregations - Averages](https://user-images.githubusercontent.com/70437668/140273662-c98d98b4-be4b-4959-8e38-8eeb15651eac.jpg)
 
 Query the average population of all cities in CITY where District is California.
 
@@ -622,6 +630,8 @@ WHERE DISTRICT = 'California';
 
 ### Revising Aggregations - The Count Function
 
+![Revising Aggregations - The Count Function](https://user-images.githubusercontent.com/70437668/140273697-0a4fdc5d-04ad-4743-b0ec-5b3de2979dbc.jpg)
+
 Query a count of the number of cities in CITY having a Population larger than 100,000.
 ```
 SELECT COUNT(POPULATION)
@@ -631,6 +641,8 @@ WHERE POPULATION > 100000;
 
 ### Revising Aggregations - The Sum Function
 
+![Revising Aggregations - The Sum Function](https://user-images.githubusercontent.com/70437668/140273705-2ddcf75f-38bc-449b-ab25-0249022e516c.jpg)
+
 Query the total population of all cities in CITY where District is California.
 ```
 SELECT SUM(POPULATION)
@@ -639,6 +651,10 @@ WHERE DISTRICT = 'California';
 ```
 
 ### The Blunder
+
+![The Blunder p1](https://user-images.githubusercontent.com/70437668/140273714-c97d962b-fa5c-4f62-8914-d8fd06a75a2e.jpg)
+
+![The Blunder p2](https://user-images.githubusercontent.com/70437668/140273718-aba2da54-054d-42ac-970a-5e8d0238b799.jpg)
 
 Samantha was tasked with calculating the average monthly salaries for all employees in the EMPLOYEES table, but did not realize her keyboard's  key was broken until after completing the calculation. 
 
@@ -662,6 +678,12 @@ We would have used Round() if they had told u to return its nearest integer.*
 ```
 
 ### Top Earners
+
+![Top Earners p1](https://user-images.githubusercontent.com/70437668/140273727-c6cedfcb-1f81-4580-9cbe-361af1f03584.jpg)
+
+![Top Earners p2](https://user-images.githubusercontent.com/70437668/140273733-c2223b48-33d6-4dfa-a3e8-ad650de20e4e.jpg)
+
+![Top Earners p3](https://user-images.githubusercontent.com/70437668/140273754-68fb893b-b00a-4594-a621-892223828df4.jpg)
 
 We define an employee's total earnings to be their monthly salary x month worked, and the maximum total earnings to be the maximum total earnings for any employee in the Employee table. Write a query to find the maximum total earnings for all employees as well as the total number of employees who have maximum total earnings. 
 
@@ -690,6 +712,8 @@ limit 1 -- it will limit the table to 1 row only. so the query displays the frst
 
 ### Weather Observation Station 2
 
+![Weather Observation Station 2](https://user-images.githubusercontent.com/70437668/140273772-5e630c52-1281-4fec-8df8-6772fcc167ce.jpg)
+
 Query the following two values from the STATION table:
 
 The sum of all values in LAT_N rounded to a scale of 2 decimal places.
@@ -702,6 +726,8 @@ FROM STATION;
 
 ### Weather Observation Station 13
 
+![Weather Observation Station 13](https://user-images.githubusercontent.com/70437668/140273792-fe469c64-2489-44c4-bf81-7fe2b9f6a812.jpg)
+
 Query the sum of Northern Latitudes (LAT_N) from STATION having values greater than 38.7800 and less than 137.2345. Truncate your answer to  decimal places.
 ```
 SELECT ROUND(SUM(LAT_N), 4)
@@ -711,6 +737,8 @@ AND LAT_N < 137.2345;
 ```
 
 ### Weather Observation Station 14
+
+![Weather Observation Station 14](https://user-images.githubusercontent.com/70437668/140273816-7c165bce-b7ba-458e-80b5-ce435c7d56a5.jpg)
 
 Query the greatest value of the Northern Latitudes (LAT_N) from STATION that is less than 137.2345. 
 
@@ -722,6 +750,8 @@ WHERE LAT_N < 137.2345;
 ```
 
 ### Weather Observation Station 15
+
+![Weather Observation Station 15](https://user-images.githubusercontent.com/70437668/140273828-6d77efdf-0cbc-4bc2-be55-dbce4a928e47.jpg)
 
 Query the Western Longitude (LONG_W) for the largest Northern Latitude (LAT_N) in STATION that is less than 137.2345. 
 
@@ -736,6 +766,8 @@ WHERE LAT_N = (SELECT MAX(LAT_N)
 
 ### Weather Observation Station 16
 
+![Weather Observation Station 16](https://user-images.githubusercontent.com/70437668/140273841-ebd0031c-bc5b-4fe5-89ef-8193a664f2b7.jpg)
+
 Query the smallest Northern Latitude (LAT_N) from STATION that is greater than 38.7780. Round your answer to 4 decimal places.
 ```
 SELECT ROUND(MIN(LAT_N), 4)
@@ -744,6 +776,8 @@ WHERE LAT_N > 38.7780;
 ```
 
 ### Weather Observation Station 17
+
+![Weather Observation Station 17](https://user-images.githubusercontent.com/70437668/140273852-2dc69430-d26f-4db6-bd66-dbcbc780d6a3.jpg)
 
 Query the Western Longitude (LONG_W)where the smallest Northern Latitude (LAT_N) in STATION is greater than 38.7780. 
 
@@ -770,6 +804,8 @@ WHERE LAT_N = (
 
 ### Weather Observation Station 18 - Manhattan Distance
 
+![Weather Observation Station 18](https://user-images.githubusercontent.com/70437668/140273863-012605a7-1d7d-4914-ab0d-62694ca443e4.jpg)
+
 Consider P1(a, b) and P2(a, b) to be two points on a 2D plane.
 
 a happens to equal the minimum value in Northern Latitude (LAT_N in STATION).
@@ -788,6 +824,8 @@ FROM STATION;
 
 ### Weather Observation Station 19 - Euclidean Distance
 
+![Weather Observation Station 19](https://user-images.githubusercontent.com/70437668/140273872-061c2333-cc50-47fe-a6b9-276d646f904b.jpg)
+
 Consider P1(a,b) and P2(c,d) to be two points on a 2D plane where (a,b) are the respective minimum and maximum values of Northern Latitude (LAT_N) and (c,d) are the respective minimum and maximum values of Western Longitude (LONG_W) in STATION.
 
 Query the Euclidean Distance between points P1 and P2 and format your answer to display 4 decimal digits.
@@ -803,6 +841,8 @@ FROM
 ```
 
 ### Weather Observation Station 20 - Median
+
+![Weather Observation Station 20](https://user-images.githubusercontent.com/70437668/140273878-2adcc9d9-5a7d-4643-a4fe-f6eaa34873e2.jpg)
 
 A median is defined as a number separating the higher half of a data set from the lower half. 
 
@@ -820,6 +860,8 @@ WHERE (
 
 ## Alternative Queries
 
+![Draw The Triangle 1](https://user-images.githubusercontent.com/70437668/140273908-2ce9178c-1997-4eb6-a4ef-f51871064293.jpg)
+
 ### Draw The Triangle 1
 ```
 SET @NUMBER = 21;
@@ -827,6 +869,9 @@ SELECT REPEAT('* ', @number := @number - 1) FROM INFORMATION_SCHEMA.TABLES;
 ```
 
 ### Draw The Triangle 2
+
+![Draw The Triangle 2](https://user-images.githubusercontent.com/70437668/140273957-3a785ac7-184c-4b57-a41a-b25ff9f693f5.jpg)
+
 ```
 SET @ROW := 0;
 SELECT REPEAT('* ', @ROW := @ROW + 1) FROM INFORMATION_SCHEMA.TABLES
@@ -834,6 +879,8 @@ WHERE @ROW < 20;
 ```
 
 ### Print Prime Numbers
+
+![Print Prime Numbers](https://user-images.githubusercontent.com/70437668/140273976-a5f20483-80a4-4e39-8adc-c052fec553d0.jpg)
 
 Write a query to print all prime numbers less than or equal to 1000. 
 
@@ -865,6 +912,10 @@ WHERE NUM_B <= 1000 AND NOT EXISTS(
 ## Advanced Select
 
 ### Binary Tree Nodes
+
+![Binary Tree Nodes](https://user-images.githubusercontent.com/70437668/140274093-cad6e155-8fd5-4e1f-ab4f-505bee36ecd4.jpg)
+
+![Binary Tree Nodes p2](https://user-images.githubusercontent.com/70437668/140274106-bcec2dbe-eae1-4b4f-9824-09b2ac723ea0.jpg)
 
 You are given a table, BST, containing two columns: N and P, where N represents the value of a node in Binary Tree, and P is the parent of N.
 
@@ -944,6 +995,14 @@ The company_code is string, so the sorting should not be numeric.
 
 For example, if the company_codes are C_1, C_2, and C_10, then the ascending company_codes will be C_1, C_10, and C_2.
 
+![New Companies](https://user-images.githubusercontent.com/70437668/140274255-1dd6b15e-3df8-4ec9-aa27-8699fcb53c3d.jpg)
+
+![New Companies p2](https://user-images.githubusercontent.com/70437668/140274271-34a77b67-12b6-4998-ba49-17c202962c00.jpg)
+
+![New Companies p3](https://user-images.githubusercontent.com/70437668/140274280-0bbd5bd8-2c42-4950-95de-8690e4132fa4.jpg)
+
+![New Companies p4](https://user-images.githubusercontent.com/70437668/140274303-5c2de528-ec76-40fd-9950-c2f052e566cb.jpg)
+
 Method 1 - Not using join
 ```
 select company_code, founder,
@@ -968,6 +1027,10 @@ order by c.company_code;
 ```
 
 ### Occupations
+
+![Occupations](https://user-images.githubusercontent.com/70437668/140274315-f0a364c3-8531-4a0f-913f-4a795d7b159a.jpg)
+
+![Occupations p2](https://user-images.githubusercontent.com/70437668/140274323-b1fd56cc-cd72-4b09-8308-10a046f18d3c.jpg)
 
 Pivot the Occupation column in OCCUPATIONS so that each Name is sorted alphabetically and displayed underneath its corresponding Occupation. 
 
@@ -1008,6 +1071,10 @@ group by RowNumber
 
 ### The PADS
 
+![The PADS](https://user-images.githubusercontent.com/70437668/140274344-d3aa72c7-9892-4548-8b8c-9e9121a6a3aa.jpg)
+
+![The PADS p2](https://user-images.githubusercontent.com/70437668/140274359-108388fc-10e6-45ff-9112-81fa694352c0.jpg)
+
 Generate the following two result sets:
 
 Query an alphabetically ordered list of all names in OCCUPATIONS, immediately followed by the first letter of each profession as a parenthetical (i.e.: enclosed in parentheses). 
@@ -1034,6 +1101,10 @@ GROUP BY OCCUPATION ORDER BY TOTAL;
 ```
 
 ### Type of Triangle
+
+![Type of Triangle](https://user-images.githubusercontent.com/70437668/140274376-bf55f9d4-9561-4f84-b1b5-f583c606d66e.jpg)
+
+![Type of Triangle p2](https://user-images.githubusercontent.com/70437668/140274379-17e0f250-5159-44c2-98a2-cae0b9fee657.jpg)
 
 Write a query identifying the type of each record in the TRIANGLES table using its three side lengths. 
 
@@ -1064,8 +1135,13 @@ FROM TRIANGLES;
 
 ### 15 Days of Learning SQL
 
-Julia conducted a 15 days of learning SQL contest. 
+![15 Days of Learning SQL](https://user-images.githubusercontent.com/70437668/140274417-ea136205-80a3-449e-a128-d36710715485.jpg)
 
+![15 Days of Learning SQL p2](https://user-images.githubusercontent.com/70437668/140274457-0b4c7053-6dcb-4535-ab0f-625d6a0200f1.jpg)
+
+![15 Days of Learning SQL p3](https://user-images.githubusercontent.com/70437668/140274478-5ab20867-14c3-4e21-bd6d-84582ae2e12b.jpg)
+
+Julia conducted a 15 days of learning SQL contest. 
 
 The start date of the contest was March 01, 2016 and the end date was March 15, 2016.
 
@@ -1128,6 +1204,14 @@ SELECT
 
 ### Interviews
 
+![Interviews](https://user-images.githubusercontent.com/70437668/140274496-55a5b29e-144b-4b77-aa59-b266419a37c0.jpg)
+
+![Interviews p2](https://user-images.githubusercontent.com/70437668/140274503-f52b174e-8a60-4f97-b684-8d18deca5ff8.jpg)
+
+![Interviews p3](https://user-images.githubusercontent.com/70437668/140274523-a8060239-5677-49a7-80fd-15dbb102f230.jpg)
+
+![Interviews p4](https://user-images.githubusercontent.com/70437668/140274506-18242086-3425-4fa3-b4ee-275d037ee322.jpg)
+
 Samantha interviews many candidates from different colleges using coding challenges and contests. 
 
 Write a query to print the contest_id, hacker_id, name, and the sums of total_submissions, 
@@ -1189,6 +1273,14 @@ ORDER BY A.contest_id
 ```
 
 ### Placements
+
+![Placements 1](https://user-images.githubusercontent.com/70437668/140275291-c0f138ee-810c-4fad-b3db-7e1f2f9686e1.jpg)
+
+![Placements 2](https://user-images.githubusercontent.com/70437668/140275299-5edde35d-8a25-40bd-b3bc-172296d71de5.jpg)
+
+![Placements 3](https://user-images.githubusercontent.com/70437668/140275335-40253bde-bb63-47cb-acb1-0b9759651c23.jpg)
+
+
 You are given three tables: Students, Friends and Packages. 
 
 Students contains two columns: ID and Name. 
@@ -1215,6 +1307,16 @@ to compare if salaries of P2 > those of P1 and print by order of P2's salaries. 
 ```
 
 ### SQL Project Planning
+
+![SQL Project Planning](https://user-images.githubusercontent.com/70437668/140274547-9477c92b-5fa9-4a2a-aca2-fabb59601f9f.jpg)
+
+![SQL Project Planning p2](https://user-images.githubusercontent.com/70437668/140274555-1db31ac1-a575-4109-bd94-695442cdd4a0.jpg)
+
+![SQL Project Planning p3](https://user-images.githubusercontent.com/70437668/140274572-19db32e9-d425-4a90-b022-f831e00baf10.jpg)
+
+![SQL Project Planning p4](https://user-images.githubusercontent.com/70437668/140274588-d6dc55c6-d14e-49a1-8c3c-260f4c1827c7.jpg)
+
+![SQL Project Planning p5](https://user-images.githubusercontent.com/70437668/140274601-af9e04c9-2ff1-4865-ac2d-4a155b460877.jpg)
 
 You are given a table, Projects, containing three columns: Task_ID, Start_Date and End_Date. 
 
@@ -1262,6 +1364,8 @@ ORDER BY DATEDIFF(End_Date, Start_Date), Start_Date;
 ```
 
 ### Symmetric Pairs
+
+![Symmetric Pairs](https://user-images.githubusercontent.com/70437668/140274680-137d9321-8b8b-4455-a983-9a0e3ba7ef41.jpg)
 
 You are given a table, Functions, containing two columns: X and Y.
 
