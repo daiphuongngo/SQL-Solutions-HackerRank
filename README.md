@@ -315,6 +315,11 @@ WHERE CITY REGEXP '^[^aeiou].*[^aeiou]$'; /* .* in between to have "and" */
 ## Basic Join
 
 ### African Cities
+
+![African Cities](https://user-images.githubusercontent.com/70437668/140265525-4c4e9585-26bf-465a-b212-b7adf18cfd17.jpg)
+
+![African Cities p2](https://user-images.githubusercontent.com/70437668/140265532-ae7ad7ca-8875-4f1b-b65b-d0bf11afc11d.jpg)
+
 Given the CITY and COUNTRY tables, query the names of all cities where the CONTINENT is 'Africa'.
 
 Note: CITY.CountryCode and COUNTRY.Code are matching key columns. 
@@ -330,6 +335,10 @@ WHERE CONTINENT = 'Africa'
 
 ### Average Population of Each Continent
 
+![Average Population of Each Continent](https://user-images.githubusercontent.com/70437668/140265544-cdcc0816-5081-4c79-a514-4e6d6e40a766.jpg)
+
+![Average Population of Each Continent p2](https://user-images.githubusercontent.com/70437668/140265554-a92c2cfd-632f-4405-a505-6538ac429084.jpg)
+
 Given the CITY and COUNTRY tables, query the names of all the continents (COUNTRY.Continent) and their respective average city populations (CITY.Population) rounded down to the nearest integer.
 
 Note: CITY.CountryCode and COUNTRY.Code are matching key columns.
@@ -343,6 +352,12 @@ GROUP BY COUNTRY.CONTINENT;
 ```
 
 ### Challenges
+
+![Challenges p1](https://user-images.githubusercontent.com/70437668/140265559-ab351af0-22a5-47d7-9d5c-ecd2489d0fce.jpg)
+
+![Challenges p2](https://user-images.githubusercontent.com/70437668/140265569-9624f503-301d-4752-b42d-dbb835744b66.jpg)
+
+![Challenges p3](https://user-images.githubusercontent.com/70437668/140265578-df568bc3-7cfa-4b94-90e8-9fdf1bba4477.jpg)
 
 Julia asked her students to create some coding challenges. 
 
@@ -374,6 +389,12 @@ ORDER BY COUNT(b.hacker_id) DESC, a.hacker_id;
 
 ### Contest Leaderboard
 
+![Contest Leaderboard p1](https://user-images.githubusercontent.com/70437668/140265595-4e61c775-dbd6-4c10-aead-a4c76a6a8903.jpg)
+
+![Contest Leaderboard p2](https://user-images.githubusercontent.com/70437668/140265601-e9182b58-4c37-4bf1-8b44-301820b6740b.jpg)
+
+![Contest Leaderboard p3](https://user-images.githubusercontent.com/70437668/140265612-1c91d840-6f77-4d4e-bcee-5584ae49c4d8.jpg)
+
 You did such a great job helping Julia with her last coding contest challenge that she wants you to work on this one, too!
 
 The total score of a hacker is the sum of their maximum scores for all of the challenges. 
@@ -401,6 +422,16 @@ order by total_score desc, h.hacker_id;
 ```
 
 ### Ollivander's Inventory
+
+![Ollivander's Inventory p1](https://user-images.githubusercontent.com/70437668/140265630-95f1aef0-552d-4304-9558-7dbdfdf8a624.jpg)
+
+![Ollivander's Inventory p2](https://user-images.githubusercontent.com/70437668/140265638-c4dd0491-8abd-41ac-a113-6cbe66dc47d5.jpg)
+
+![Ollivander's Inventory p3](https://user-images.githubusercontent.com/70437668/140265649-e2c37a93-5425-41d1-9381-798fb40c6a84.jpg)
+
+![Ollivander's Inventory p4](https://user-images.githubusercontent.com/70437668/140265654-52aeb26b-3a5f-45cb-b28d-b58be55c2227.jpg)
+
+![Ollivander's Inventory p5](https://user-images.githubusercontent.com/70437668/140265658-2cd81870-f0ad-466f-93d1-ac7e63d8169e.jpg)
 
 Harry Potter and his friends are at Ollivander's with Ron, finally replacing Charlie's old broken wand.
 
@@ -447,6 +478,10 @@ ORDER BY W.power DESC, P.age DESC;
 
 ### Population Census 
 
+![Population Census](https://user-images.githubusercontent.com/70437668/140265668-14dba55e-cef6-4840-8782-d8e5e38f2f83.jpg)
+
+![Population Census p2](https://user-images.githubusercontent.com/70437668/140265671-51ffe137-a85c-4ad6-a68e-a110b99c2a36.jpg)
+
 Given the CITY and COUNTRY tables, query the sum of the populations of all cities where the CONTINENT is 'Asia'.
 
 Note: CITY.CountryCode and COUNTRY.Code are matching key columns.
@@ -477,6 +512,12 @@ WHERE CITY.COUNTRYCODE = COUNTRY.CODE AND COUNTRY.CONTINENT = 'Asia';
 
 ### The Report
 
+![The Report](https://user-images.githubusercontent.com/70437668/140265689-f99176fb-aea8-49e5-a85a-e97bd309f34a.jpg)
+
+![The Report p2](https://user-images.githubusercontent.com/70437668/140265695-b8b8596f-6d40-4b9e-8e6e-a050ce0db46c.jpg)
+
+![The Report p3](https://user-images.githubusercontent.com/70437668/140265703-95b1dca0-a0da-4e98-b5c6-8bc72445bad0.jpg)
+
 Ketty gives Eve a task to generate a report containing three columns: Name, Grade and Mark. 
 
 Ketty doesn't want the NAMES of those students who received a grade lower than 8. 
@@ -499,6 +540,14 @@ Privacy
 ```
 
 ### Top Competitors 
+
+![Top Competitors](https://user-images.githubusercontent.com/70437668/140265718-5e7600eb-fdca-4b14-a07a-6de8fed2023d.jpg)
+
+![Top Competitors p2](https://user-images.githubusercontent.com/70437668/140265727-fc760aba-7787-4fa7-b1f5-2ad22ed9f897.jpg)
+
+![Top Competitors p3](https://user-images.githubusercontent.com/70437668/140265736-8fadc14a-2f12-4e0b-9800-97d603d4e450.jpg)
+
+![Top Competitors p4](https://user-images.githubusercontent.com/70437668/140265755-f150cb28-1748-4719-be4a-017d3a032dfa.jpg)
 
 Julia just finished conducting a coding contest, and she needs your help assembling the leaderboard! 
 
