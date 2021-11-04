@@ -255,6 +255,705 @@ FROM STATION
 WHERE CITY REGEXP '^[^aeiou].*[^aeiou]$'; /* .* in between to have "and" */
 ```
 
+## Basic Join
+
+### African Cities
+Given the CITY and COUNTRY tables, query the names of all cities where the CONTINENT is 'Africa'.
+
+Note: CITY.CountryCode and COUNTRY.Code are matching key columns. 
+
+```
+SELECT CITY.NAME
+FROM CITY INNER JOIN COUNTRY
+ON COUNTRYCODE = CODE
+WHERE CONTINENT = 'Africa'
+
+/*using inner join*/
+```
+
+### Average Population of Each Continent
+
+Given the CITY and COUNTRY tables, query the names of all the continents (COUNTRY.Continent) and their respective average city populations (CITY.Population) rounded down to the nearest integer.
+
+Note: CITY.CountryCode and COUNTRY.Code are matching key columns.
+```
+SELECT COUNTRY.CONTINENT, FLOOR(AVG(CITY.POPULATION))
+FROM CITY INNER JOIN COUNTRY
+ON CITY.COUNTRYCODE = COUNTRY.CODE
+GROUP BY COUNTRY.CONTINENT;
+
+/* Group by country.continent: Since the population column in the city table has populations city wise but the question asks us to get the population of continents.*/
+```
+
+### Challenges
+
+Julia asked her students to create some coding challenges. 
+
+Write a query to print the hacker_id, name, and the total number of challenges created by each student. 
+
+Sort your results by the total number of challenges in descending order. 
+
+If more than one student created the same number of challenges, then sort the result by hacker_id. 
+
+If more than one student created the same number of challenges and the count is less than the maximum number of challenges created, then exclude those students from the result.
+
+```
+SELECT a.hacker_id, a.name, COUNT(b.hacker_id)    
+FROM Hackers a, Challenges b
+WHERE a.hacker_id = b.hacker_id
+GROUP BY a.hacker_id,a.name
+HAVING COUNT(b.hacker_id) NOT IN
+    (SELECT DISTINCT COUNT(hacker_id) 
+     FROM Challenges
+     WHERE hacker_id <> a.hacker_id
+     GROUP BY hacker_id
+     HAVING COUNT(hacker_id) < 
+     (SELECT MAX(x.challenge_count)
+      FROM (SELECT COUNT(b.challenge_id) AS challenge_count
+            FROM Challenges b
+            GROUP BY b.hacker_id) AS x ))
+ORDER BY COUNT(b.hacker_id) DESC, a.hacker_id;
+```
+
+### Contest Leaderboard
+
+You did such a great job helping Julia with her last coding contest challenge that she wants you to work on this one, too!
+
+The total score of a hacker is the sum of their maximum scores for all of the challenges. 
+
+Write a query to print the hacker_id, name, and total score of the hackers ordered by the descending score. If more than one hacker achieved the same total score, then sort the result by ascending hacker_id. Exclude all hackers with a total score of  from your result. 
+
+```
+select h.hacker_id, name, sum(score) as total_score
+from
+hackers as h inner join
+
+/* find max_score*/
+(select hacker_id,  max(score) as score 
+ from submissions 
+ group by challenge_id, hacker_id) max_score
+
+on h.hacker_id = max_score.hacker_id
+group by h.hacker_id, name
+
+/* don't accept hackers with total_score=0 */
+having total_score > 0
+
+/* finally order as required */
+order by total_score desc, h.hacker_id;
+```
+
+### Ollivander's Inventory
+
+Harry Potter and his friends are at Ollivander's with Ron, finally replacing Charlie's old broken wand.
+
+Hermione decides the best way to choose is by determining the minimum number of gold galleons needed to buy each non-evil wand of high power and age. Write a query to print the id, age, coins_needed, and power of the wands that Ron's interested in, sorted in order of descending power. 
+
+If more than one wand has same power, sort the result in order of descending age.
+
+Method 1
+
+```
+SELECT WANDS.ID,
+       MIN_PRICES.AGE,
+       WANDS.COINS_NEEDED,
+       WANDS.POWER
+FROM WANDS
+INNER JOIN
+  (SELECT WANDS.CODE,
+          WANDS.POWER,
+          MIN(WANDS_PROPERTY.AGE) AS AGE,
+          MIN(WANDS.COINS_NEEDED) AS MIN_PRICE
+   FROM WANDS
+   INNER JOIN WANDS_PROPERTY ON WANDS.CODE = WANDS_PROPERTY.CODE
+   WHERE WANDS_PROPERTY.IS_EVIL = 0
+   GROUP BY WANDS.CODE,
+            WANDS.POWER) MIN_PRICES ON WANDS.CODE = MIN_PRICES.CODE
+AND WANDS.POWER = MIN_PRICES.POWER
+AND WANDS.COINS_NEEDED = MIN_PRICES.MIN_PRICE
+ORDER BY WANDS.POWER DESC,
+         MIN_PRICES.AGE DESC;
+```
+
+Method 2
+```
+SELECT W.id, P.age, W.coins_needed, W.power
+FROM WANDS AS W
+    INNER JOIN WANDS_PROPERTY AS P ON W.code = P.code
+WHERE P.is_evil = 0 AND W.coins_needed = 
+    (SELECT MIN(coins_needed)
+     FROM WANDS AS W1
+        INNER JOIN WANDS_PROPERTY AS P1 ON W1.code = P1.code
+     WHERE W1.power = W.power AND P1.age = P.age)
+ORDER BY W.power DESC, P.age DESC;
+```
+
+### Population Census 
+
+Given the CITY and COUNTRY tables, query the sum of the populations of all cities where the CONTINENT is 'Asia'.
+
+Note: CITY.CountryCode and COUNTRY.Code are matching key columns.
+
+Not using join
+```
+SELECT CITY.NAME 
+FROM CITY, COUNTRY
+WHERE CODE = COUNTRYCODE AND CONTINENT = 'Africa';
+```
+
+Using double where
+```
+SELECT NAME 
+FROM CITY
+WHERE COUNTRYCODE IN (
+    SELECT CODE 
+    FROM COUNTRY
+    WHERE CONTINENT = 'Africa');
+```
+
+Using inner join
+```
+SELECT SUM(CITY.POPULATION)
+FROM CITY, COUNTRY
+WHERE CITY.COUNTRYCODE = COUNTRY.CODE AND COUNTRY.CONTINENT = 'Asia';
+```
+
+### The Report
+
+Ketty gives Eve a task to generate a report containing three columns: Name, Grade and Mark. 
+
+Ketty doesn't want the NAMES of those students who received a grade lower than 8. 
+
+The report must be in descending order by grade -- i.e. higher grades are entered first. 
+
+If there is more than one student with the same grade (8-10) assigned to them, order those particular students by their name alphabetically. 
+
+Finally, if the grade is lower than 8, use "NULL" as their name and list them by their grades in descending order. 
+
+If there is more than one student with the same grade (1-7) assigned to them, order those particular students by their marks in ascending order.
+```
+SELECT IF(GRADE < 8, NULL, NAME), GRADE, MARKS
+FROM STUDENTS JOIN GRADES
+WHERE MARKS BETWEEN MIN_MARK and MAX_MARK
+ORDER BY GRADE DESC, NAME;
+© 2021 GitHub, Inc.
+Terms
+Privacy
+```
+
+### Top Competitors 
+
+Julia just finished conducting a coding contest, and she needs your help assembling the leaderboard! 
+
+Write a query to print the respective hacker_id and name of hackers who achieved full scores for more than one challenge. 
+
+Order your output in descending order by the total number of challenges in which the hacker earned a full score. 
+
+If more than one hacker received full scores in same number of challenges, then sort them by ascending hacker_id.
+
+Inner join
+```
+select h.hacker_id, h.name
+from submissions s
+inner join challenges c
+on s.challenge_id = c.challenge_id
+inner join difficulty d
+on c.difficulty_level = d.difficulty_level 
+inner join hackers h
+on s.hacker_id = h.hacker_id
+where s.score = d.score 
+group by h.hacker_id, h.name
+having count(s.hacker_id) > 1
+order by count(s.hacker_id) desc, s.hacker_id asc
+
+
+/* The main thing is using having
+/* join tables together, to make a master table which contains all the info */ select sub.hacker_id, hak.name from submissions sub join challenges cha on sub.challenge_id = cha.challenge_id join hackers hak on sub.hacker_id = hak.hacker_id join difficulty dif on cha.difficulty_level = dif.difficulty_level
+
+/* filter logic, to eliminate submissions that did not earn full score */ where dif.score = sub.score
+
+/* further eliminate hackers who only had one full-score submission */ group by sub.hacker_id, hak.name having count(sub.score) > 1
+
+/* display by the order stated in the proble, */ order by count(sub.score) desc, sub.hacker_id */
+```
+
+## Basic Aggregation
+
+### Average Population
+
+Query the average population for all cities in CITY, rounded down to the nearest integer.
+```
+SELECT FLOOR(AVG(POPULATION))
+FROM CITY;
+```
+
+### Japan Population
+
+Query the sum of the populations for all Japanese cities in CITY. The COUNTRYCODE for Japan is JPN.
+```
+SELECT SUM(POPULATION)
+FROM CITY
+WHERE COUNTRYCODE = 'JPN';
+```
+
+### Population Density Difference
+
+Query the difference between the maximum and minimum populations in CITY.
+```
+SELECT MAX(POPULATION) - MIN(POPULATION)
+FROM CITY;
+```
+
+### Revising Aggregations - Averages
+
+Query the average population of all cities in CITY where District is California.
+
+```
+SELECT AVG(POPULATION)
+FROM CITY
+WHERE DISTRICT = 'California';
+```
+
+### Revising Aggregations - The Count Function
+
+Query a count of the number of cities in CITY having a Population larger than 100,000.
+```
+SELECT COUNT(POPULATION)
+FROM CITY
+WHERE POPULATION > 100000;
+```
+
+### Revising Aggregations - The Sum Function
+
+Query the total population of all cities in CITY where District is California.
+```
+SELECT SUM(POPULATION)
+FROM CITY
+WHERE DISTRICT = 'California';
+```
+
+### The Blunder
+
+Samantha was tasked with calculating the average monthly salaries for all employees in the EMPLOYEES table, but did not realize her keyboard's  key was broken until after completing the calculation. 
+
+She wants your help finding the difference between her miscalculation (using salaries with any zeros removed), and the actual average salary.
+
+Write a query calculating the amount of error (i.e.: acutal - miscalculated average monthly salaries), and round it up to the next integer. 
+
+Explanation
+
+The table below shows the salaries without zeros as they were entered by Samantha:
+
+Samantha computes an average salary of 98.00. The actual average salary is 2159.00.
+
+The resulting error between the two calculations is 2159.00 - 98.00. Since it is equal to the integer 2061, it does not get rounded up.
+```
+SELECT CEIL(AVG(SALARY) - AVG(REPLACE(SALARY, '0', '')))  /* # replace all occurances of '0' in Salary with '' */
+FROM EMPLOYEES;
+
+/*CEIL() because they have asked u to round up the error to its next integer, not to its nearest integer. 
+We would have used Round() if they had told u to return its nearest integer.*
+```
+
+### Top Earners
+
+We define an employee's total earnings to be their monthly salary x month worked, and the maximum total earnings to be the maximum total earnings for any employee in the Employee table. Write a query to find the maximum total earnings for all employees as well as the total number of employees who have maximum total earnings. 
+
+Then print these values as  space-separated integers.
+
+Explanation
+
+The table and earnings data is depicted in the following diagram:
+
+The maximum earnings value is . The only employee with earnings  is Kimberly, so we print the maximum earnings value () and a count of the number of employees who have earned  (which is ) as two space-separated values.
+```
+SELECT (SALARY * MONTHS) AS EARNINGS, 
+COUNT(*) 
+FROM EMPLOYEE 
+GROUP BY 1 
+ORDER BY EARNINGS DESC
+LIMIT 1;
+
+/*salary*month --- first to calculate total earnings we multiply month * salary
+count() -- next for counting no of employees having that salary we use count()
+group by 1 -- will take simple example..consider query SELECT name , id FROM employee group by 1; in this query there are 2 columns i.e., name and id...
+So we have to group it by 1st column that is name.
+order by earning desc -- it will order the table in desc order do that max value appears frst.
+limit 1 -- it will limit the table to 1 row only. so the query displays the frst row only. */
+```
+
+### Weather Observation Station 2
+
+Query the following two values from the STATION table:
+
+The sum of all values in LAT_N rounded to a scale of 2 decimal places.
+
+The sum of all values in LONG_W rounded to a scale of 2 decimal places.
+```
+SELECT ROUND(SUM(LAT_N), 2), ROUND(SUM(LONG_W), 2)
+FROM STATION;
+```
+
+### Weather Observation Station 13
+
+Query the sum of Northern Latitudes (LAT_N) from STATION having values greater than 38.7800 and less than 137.2345. Truncate your answer to  decimal places.
+```
+SELECT ROUND(SUM(LAT_N), 4)
+FROM STATION
+WHERE LAT_N > 38.7880
+AND LAT_N < 137.2345;
+```
+
+### Weather Observation Station 14
+
+Query the greatest value of the Northern Latitudes (LAT_N) from STATION that is less than 137.2345. 
+
+Truncate your answer to 4 decimal places.
+```
+SELECT ROUND(MAX(LAT_N), 4)
+FROM STATION
+WHERE LAT_N < 137.2345;
+```
+
+### Weather Observation Station 15
+
+Query the Western Longitude (LONG_W) for the largest Northern Latitude (LAT_N) in STATION that is less than 137.2345. 
+
+Round your answer to 4 decimal places.
+```
+SELECT ROUND(LONG_W, 4)
+FROM STATION 
+WHERE LAT_N = (SELECT MAX(LAT_N)
+	FROM STATION
+	WHERE LAT_N < 137.2345);
+```
+
+### Weather Observation Station 16
+
+Query the smallest Northern Latitude (LAT_N) from STATION that is greater than 38.7780. Round your answer to 4 decimal places.
+```
+SELECT ROUND(MIN(LAT_N), 4)
+FROM STATION 
+WHERE LAT_N > 38.7780;
+```
+
+### Weather Observation Station 17
+
+Query the Western Longitude (LONG_W)where the smallest Northern Latitude (LAT_N) in STATION is greater than 38.7780. 
+
+Round your answer to 4 decimal places.
+
+Method 1: Using LIMIT 1
+```
+SELECT ROUND(LONG_W, 4)
+FROM STATION
+WHERE LAT_N > 38.7780
+ORDER BY LAT_N
+LIMIT 1;
+```
+
+Method 2: Using subquery
+```
+SELECT ROUND(LONG_W, 4)
+FROM STATION
+WHERE LAT_N = (
+	SELECT MIN(LAT_N)
+	FROM STATION 
+	WHERE LAT_N > 38.7880);
+```
+
+### Weather Observation Station 18 - Manhattan Distance
+
+Consider P1(a, b) and P2(a, b) to be two points on a 2D plane.
+
+a happens to equal the minimum value in Northern Latitude (LAT_N in STATION).
+
+b happens to equal the minimum value in Western Longitude (LONG_W in STATION).
+
+c happens to equal the maximum value in Northern Latitude (LAT_N in STATION).
+
+d happens to equal the maximum value in Western Longitude (LONG_W in STATION).
+
+Query the Manhattan Distance between points P1 and P2 and round it to a scale of  decimal places.
+```
+SELECT ROUND(ABS(MIN(LAT_N) - MAX(LAT_N)) + ABS(MIN(LONG_W) - MAX(LONG_W)), 4)
+FROM STATION; 
+```
+
+### Weather Observation Station 19 - Euclidean Distance
+
+Consider P1(a,b) and P2(c,d) to be two points on a 2D plane where (a,b) are the respective minimum and maximum values of Northern Latitude (LAT_N) and (c,d) are the respective minimum and maximum values of Western Longitude (LONG_W) in STATION.
+
+Query the Euclidean Distance between points P1 and P2 and format your answer to display 4 decimal digits.
+
+```
+SELECT
+    ROUND(SQRT(
+        POWER(MAX(LAT_N)  - MIN(LAT_N),  2)
+      + POWER(MAX(LONG_W) - MIN(LONG_W), 2)
+    ), 4)
+FROM 
+    STATION;
+```
+
+### Weather Observation Station 20 - Median
+
+A median is defined as a number separating the higher half of a data set from the lower half. 
+
+Query the median of the Northern Latitudes (LAT_N) from STATION and round your answer to 4 decimal places.
+```
+SELECT ROUND(S.LAT_N,4) 
+FROM STATION S 
+WHERE (
+    SELECT COUNT(LAT_N) 
+    FROM STATION 
+    WHERE LAT_N < S.LAT_N ) = (SELECT COUNT(LAT_N) 
+                               FROM STATION 
+                               WHERE LAT_N > S.LAT_N);
+```
+
+## Alternative Queries
+
+### Draw The Triangle 1
+```
+SET @NUMBER = 21;
+SELECT REPEAT('* ', @number := @number - 1) FROM INFORMATION_SCHEMA.TABLES;
+```
+
+### Draw The Triangle 2
+```
+SET @ROW := 0;
+SELECT REPEAT('* ', @ROW := @ROW + 1) FROM INFORMATION_SCHEMA.TABLES
+WHERE @ROW < 20;
+```
+
+### Print Prime Numbers
+
+Write a query to print all prime numbers less than or equal to 1000. 
+
+Print your result on a single line, and use the ampersand () character as your separator (instead of a space).
+
+For example, the output for all prime numbers <= 10 would be:
+
+2&3&5&7 
+```
+SELECT GROUP_CONCAT(NUM_B SEPARATOR '&')
+FROM (
+    SELECT @num:=@num+1 as NUM_B FROM
+    information_schema.tables t1,
+    information_schema.tables t2,
+    (SELECT @num:=1) tmp
+) tempNum
+WHERE NUM_B <= 1000 AND NOT EXISTS(
+        SELECT * FROM (
+            SELECT @number := @number+1 as NUM_A FROM
+                information_schema.tables t1,
+                information_schema.tables t2,
+                (SELECT @number := 1) tmp1
+                LIMIT 1000
+            ) temp
+        WHERE FLOOR(NUM_B/NUM_A) = (NUM_B/NUM_A) AND NUM_A < NUM_B AND NUM_A > 1
+    );
+```
+
+## Advanced Select
+
+### Binary Tree Nodes
+
+You are given a table, BST, containing two columns: N and P, where N represents the value of a node in Binary Tree, and P is the parent of N.
+
+Write a query to find the node type of Binary Tree ordered by the value of the node. Output one of the following for each node:
+
+Root: If node is root node.
+
+Leaf: If node is leaf node.
+
+Inner: If node is neither root nor leaf node.
+```
+SELECT CASE
+    WHEN P IS NULL THEN CONCAT(N, ' Root')
+    WHEN N IN (SELECT DISTINCT P FROM BST) THEN CONCAT(N, ' Inner') /* If any of the nodes in column 'N' are in Parent column 'P' it will be treated as an inner node. */
+    ELSE CONCAT(N, ' Leaf') /* Else, it will be a leaf node as the entry in 'N' column is not a parent to any other node. */
+    END
+FROM BST
+ORDER BY N ASC;
+```
+
+### Draw The Triangle 1
+
+P(R) represents a pattern drawn by Julia in R rows. The following pattern represents P(5):
+
+* * * * * 
+
+* * * * 
+
+* * * 
+
+* * 
+
+*
+
+Write a query to print the pattern P(20).
+
+```
+SET @NUMBER = 21;
+SELECT REPEAT('* ', @number := @number - 1) FROM INFORMATION_SCHEMA.TABLES;
+```
+
+### Draw The Triangle 2
+
+P(R) represents a pattern drawn by Julia in R rows. The following pattern represents P(5):
+
+*
+
+* * 
+
+* * * 
+
+* * * * 
+
+* * * * *
+
+Write a query to print the pattern P(20).
+
+```
+SET @ROW := 0;
+SELECT REPEAT('* ', @ROW := @ROW + 1) FROM INFORMATION_SCHEMA.TABLES
+WHERE @ROW < 20;
+```
+
+### New Companies
+
+Amber's conglomerate corporation just acquired some new companies. 
+
+Each of the companies follows this hierarchy: 
+
+Given the table schemas below, write a query to print the company_code, founder name, total number of lead managers, total number of senior managers, total number of managers, and total number of employees. Order your output by ascending company_code.
+
+Note:
+
+The tables may contain duplicate records.
+
+The company_code is string, so the sorting should not be numeric. 
+
+For example, if the company_codes are C_1, C_2, and C_10, then the ascending company_codes will be C_1, C_10, and C_2.
+
+Method 1 - Not using join
+```
+select company_code, founder,
+(select count(distinct lead_manager_code) from Lead_Manager where company_code = c.company_code),
+(select count(distinct senior_manager_code) from Senior_Manager where company_code = c.company_code),
+(select count(distinct manager_code) from Manager where company_code = c.company_code),
+(select count(distinct employee_code) from Employee where company_code = c.company_code)
+from Company c
+order by company_code;
+```
+Using join 
+```
+select c.company_code, c.founder, 
+    count(distinct e.lead_manager_code), 
+    count(distinct e.senior_manager_code), 
+    count(distinct e.manager_code), 
+    count(distinct e.employee_code)
+from company c
+    inner join employee e on e.company_code = c.company_code
+group by c.company_code, c.founder
+order by c.company_code;
+```
+
+### Occupations
+
+Pivot the Occupation column in OCCUPATIONS so that each Name is sorted alphabetically and displayed underneath its corresponding Occupation. 
+
+The output column headers should be Doctor, Professor, Singer, and Actor, respectively.
+
+Note: Print NULL when there are no more names corresponding to an occupation.
+
+Occupation will only contain one of the following values: Doctor, Professor, Singer or Actor.
+
+Explanation
+
+The first column is an alphabetically ordered list of Doctor names.
+
+The second column is an alphabetically ordered list of Professor names.
+
+The third column is an alphabetically ordered list of Singer names.
+
+The fourth column is an alphabetically ordered list of Actor names.
+
+The empty cell data for columns with less than the maximum number of names per occupation (in this case, the Professor and Actor columns) are filled with NULL values.
+```
+set @r1=0, @r2=0, @r3=0, @r4=0;
+select min(Doctor), min(Professor), min(Singer), min(Actor)
+from(
+  select case when Occupation = 'Doctor' then (@r1:=@r1+1)
+            when Occupation = 'Professor' then (@r2:=@r2+1)
+            when Occupation = 'Singer' then (@r3:=@r3+1)
+            when Occupation = 'Actor' then (@r4:=@r4+1) end as RowNumber,
+    case when Occupation = 'Doctor' then Name end as Doctor,
+    case when Occupation = 'Professor' then Name end as Professor,
+    case when Occupation = 'Singer' then Name end as Singer,
+    case when Occupation = 'Actor' then Name end as Actor
+  from OCCUPATIONS
+  order by Name
+) Temp
+group by RowNumber
+```
+
+### The PADS
+
+Generate the following two result sets:
+
+Query an alphabetically ordered list of all names in OCCUPATIONS, immediately followed by the first letter of each profession as a parenthetical (i.e.: enclosed in parentheses). 
+
+For example: AnActorName(A), ADoctorName(D), AProfessorName(P), and ASingerName(S).
+
+Query the number of ocurrences of each occupation in OCCUPATIONS. 
+
+Sort the occurrences in ascending order, and output them in the following format:
+
+There are a total of [occupation_count] [occupation]s.
+
+where [occupation_count] is the number of occurrences of an occupation in OCCUPATIONS and [occupation] is the lowercase occupation name. 
+
+If more than one Occupation has the same [occupation_count], they should be ordered alphabetically.
+
+Note: There will be at least two entries in the table for each type of occupation.
+
+```
+SELECT CONCAT(NAME, CONCAT('(', CONCAT(SUBSTR(OCCUPATION, 1, 1),')'))) FROM OCCUPATIONS ORDER BY NAME;
+
+SELECT CONCAT('There are a total of', CONCAT(' ', CONCAT(count(OCCUPATION), CONCAT(' ', CONCAT(lower(OCCUPATION), 's.'))))) AS TOTAL FROM occupations
+GROUP BY OCCUPATION ORDER BY TOTAL;
+```
+
+### Type of Triangle
+
+Write a query identifying the type of each record in the TRIANGLES table using its three side lengths. 
+
+Output one of the following statements for each record in the table:
+
+Equilateral: It's a triangle with 3 sides of equal length.
+
+Isosceles: It's a triangle with 3 sides of equal length.
+
+Scalene: It's a triangle with 3 sides of differing lengths.
+
+Not A Triangle: The given values of A, B, and C don't form a triangle.
+
+```
+SELECT CASE             
+    WHEN A + B > C AND B + C > A AND A + C > B THEN
+        CASE /* case is considered as if */
+            WHEN A = B AND B = C THEN 'Equilateral'
+            WHEN A = B OR B = C OR A = C THEN 'Isosceles'
+            ELSE 'Scalene'
+        END /* must have end */
+    ELSE 'Not A Triangle'
+END /* must have end */
+FROM TRIANGLES;
+```
+
 ## Advanced Join:
 
 ### 15 Days of Learning SQL
@@ -474,41 +1173,4 @@ HAVING COUNT(f1.X) > 1 or f1.X < f1.Y
 ORDER BY f1.X;
 
 /* inner join to add rows vertically */ 
-```
-
-### 
-```
-
-```
-### 
-```
-
-```
-### 
-```
-
-```
-### 
-```
-
-```
-### 
-```
-
-```
-### 
-```
-
-```
-### 
-```
-
-```
-### 
-```
-
-```
-### 
-```
-
 ```
