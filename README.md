@@ -399,23 +399,24 @@ The total score of a hacker is the sum of their maximum scores for all of the ch
 Write a query to print the hacker_id, name, and total score of the hackers ordered by the descending score. If more than one hacker achieved the same total score, then sort the result by ascending hacker_id. Exclude all hackers with a total score of  from your result. 
 
 ```
-select h.hacker_id, name, sum(score) as total_score
-from
-hackers as h inner join
+SELECT h.hacker_id, name, SUM(score) AS total_score
+FROM
+hackers AS h 
+INNER JOIN
 
 /* find max_score*/
-(select hacker_id,  max(score) as score 
- from submissions 
- group by challenge_id, hacker_id) max_score
+(SELECT hacker_id,  MAX(score) AS score 
+ FROM submissions 
+ GROUP BY challenge_id, hacker_id) max_score
 
-on h.hacker_id = max_score.hacker_id
-group by h.hacker_id, name
+ON h.hacker_id = max_score.hacker_id
+GROUP BY h.hacker_id, name
 
 /* don't accept hackers with total_score=0 */
-having total_score > 0
+HAVING total_score > 0
 
 /* finally order as required */
-order by total_score desc, h.hacker_id;
+ORDER BY total_score DESC, h.hacker_id;
 ```
 
 ### Ollivander's Inventory
@@ -460,11 +461,12 @@ ORDER BY WANDS.POWER DESC,
          MIN_PRICES.AGE DESC;
 ```
 
-Method 2
+Method 2 (preferred)
 ```
 SELECT W.id, P.age, W.coins_needed, W.power
 FROM WANDS AS W
     INNER JOIN WANDS_PROPERTY AS P ON W.code = P.code
+-- minimum number of gold galleons needed to buy each non-evil wand of high power & age 
 WHERE P.is_evil = 0 AND W.coins_needed = 
     (SELECT MIN(coins_needed)
      FROM WANDS AS W1
@@ -500,7 +502,7 @@ WHERE COUNTRYCODE IN (
     WHERE CONTINENT = 'Africa');
 ```
 
-Using inner join
+Using inner join (correct)
 ```
 SELECT SUM(CITY.POPULATION)
 FROM CITY, COUNTRY
@@ -527,6 +529,7 @@ Finally, if the grade is lower than 8, use "NULL" as their name and list them by
 
 If there is more than one student with the same grade (1-7) assigned to them, order those particular students by their marks in ascending order.
 ```
+-- If the grade is lower than 8, use "NULL" as their name
 SELECT IF(GRADE < 8, NULL, NAME), GRADE, MARKS
 FROM STUDENTS JOIN GRADES
 WHERE MARKS BETWEEN MIN_MARK and MAX_MARK
@@ -553,18 +556,19 @@ If more than one hacker received full scores in same number of challenges, then 
 
 Inner join
 ```
-select h.hacker_id, h.name
-from submissions s
-inner join challenges c
-on s.challenge_id = c.challenge_id
-inner join difficulty d
-on c.difficulty_level = d.difficulty_level 
-inner join hackers h
-on s.hacker_id = h.hacker_id
-where s.score = d.score 
-group by h.hacker_id, h.name
-having count(s.hacker_id) > 1
-order by count(s.hacker_id) desc, s.hacker_id asc
+SELECT h.hacker_id, h.name
+FROM submissions s
+INNER JOIN challenges c
+ON s.challenge_id = c.challenge_id
+INNER JOIN difficulty d
+ON c.difficulty_level = d.difficulty_level 
+INNER JOIN hackers h
+ON s.hacker_id = h.hacker_id
+WHERE s.score = d.score 
+GROUP BY h.hacker_id, h.name
+-- Hackers who achieved full scores for more than one challenge
+HAVING COUNT(s.hacker_id) > 1
+ORDER BY COUNT(s.hacker_id) DESC, s.hacker_id ASC
 
 
 /* The main thing is using having
