@@ -1171,33 +1171,35 @@ select submission_date, ( SELECT COUNT(distinct hacker_id)
         group by submission_date;
 ```
 
-Method 2
+Method 2 (preferred)
 ```
 SELECT 
     submission_date,
-( SELECT 
- COUNT(distinct hacker_id)  
- FROM Submissions hackerCount  
- WHERE hackerCount.submission_date = dates.submission_date 
- AND (SELECT 
-        COUNT(distinct submissionCount.submission_date) 
-      FROM Submissions submissionCount 
-      WHERE submissionCount.hacker_id = hackerCount.hacker_id 
-      AND submissionCount.submission_date < dates.submission_date) 
-                = dateDIFF(dates.submission_date , '2016-03-01')
-     ) ,
-( SELECT 
-    hacker_id  
+-- Get No of distinct Hackers from hackerCount   
+(   SELECT COUNT(distinct hacker_id)  
+    FROM Submissions hackerCount  
+    WHERE hackerCount.submission_date = dates.submission_date 
+    -- Count if each submission date has a distinct value, which is 1, so submissions were daily and
+    -- equal to the diff btw Mar 1st and the submission date
+    AND 
+    (   SELECT COUNT(distinct submissionCount.submission_date) 
+        FROM Submissions submissionCount 
+        WHERE submissionCount.hacker_id = hackerCount.hacker_id 
+        AND submissionCount.submission_date < dates.submission_date) = dateDIFF(dates.submission_date ,                                                                         '2016-03-01')),
+-- Get Hacker ID of the Top 1 from hackerList                
+(   SELECT hacker_id  
     FROM submissions hackerList 
     WHERE hackerList.submission_date = dates.submission_date 
     GROUP BY hacker_id 
-    ORDER BY count(submission_id) DESC , hacker_id limit 1) as topHack,
-(SELECT 
-    name 
+    ORDER BY count(submission_id) DESC , hacker_id LIMIT 1) as topHack,
+-- Get the name of the Top 1 Hacker from the hackers table   
+(   SELECT name 
     FROM hackers 
     WHERE hacker_id = topHack)
-    FROM (SELECT distinct submission_date from submissions) dates
-    GROUP BY submission_date;
+
+-- A list of distinct submission dates
+FROM (SELECT distinct submission_date from submissions) dates
+GROUP BY submission_date;
 ```
 
 ### Interviews
@@ -1330,23 +1332,16 @@ Method 1
 ```
 SELECT Start_Date, MIN(End_Date)
 FROM 
-
-/* Choose start dates that are not end dates of other projects (if a start date is an end date, 
-it is part of the samee project) */
+/* Choose start dates that are not end dates of other projects (if a start date is an end date, it is part of the same project) */
     (SELECT Start_Date FROM Projects WHERE Start_Date NOT IN (SELECT End_Date FROM Projects)) a,
-
 /* Choose end dates that are not end dates of other projects */
-    (SELECT end_date FROM PROJECTS WHERE end_date NOT IN (SELECT start_date FROM PROJECTS)) b,
-
+    (SELECT end_date FROM PROJECTS WHERE end_date NOT IN (SELECT start_date FROM PROJECTS)) b
+    
 /* At this point, we should have a list of start dates and end dates that don't necessarily correspond with each other */
-/* This makes sure we only choose end dates that fall after the start date, and choosing the MIN means for the particular start_date, 
-we get the closest end date that does not coincide with the start of another task */
-WHERE start_date < end_date
+/* This makes sure we only choose end dates that fall after the start date, and choosing the MIN means for the particular start_date, we get the closest end date that does not coincide with the start of another task */
+where start_date < end_date
 GROUP BY start_date
-ORDER BY datediff(start_date, MIN(end_date)) DESC, start_date;
-
-/* Using min means that we want to get the closest day where the start_day < end_day, 
-which means that the closest end day is the right end day where the one same project is finished. */
+ORDER BY datediff(start_date, MIN(end_date)) DESC, start_date
 ```
 
 Method 2
@@ -1355,10 +1350,10 @@ SET sql_mode = '';
 SELECT Start_Date, End_Date
 FROM 
     (SELECT Start_Date FROM Projects WHERE Start_Date NOT IN (SELECT End_Date FROM Projects)) a,
-    (SELECT End_Date FROM Projects WHERE End_Date NOT IN (SELECT Start_Date FROM Projects)) b, 
+    (SELECT End_Date FROM Projects WHERE End_Date NOT IN (SELECT Start_Date FROM Projects)) b 
 WHERE Start_Date < End_Date
 GROUP BY Start_Date 
-ORDER BY DATEDIFF(End_Date, Start_Date), Start_Date;
+ORDER BY DATEDIFF(End_Date, Start_Date), Start_Date
 ```
 
 ### Symmetric Pairs
@@ -1374,8 +1369,10 @@ Write a query to output all such symmetric pairs in ascending order by the value
 List the rows such that X1 ≤ Y1. 
 
 ```
-SELECT f1.X, f1.Y FROM Functions f1
-INNER JOIN Functions f2 ON f1.X = f2.Y AND f1.Y = f2.X
+SELECT f1.X, f1.Y 
+FROM Functions f1
+INNER JOIN Functions f2 
+ON f1.X = f2.Y AND f1.Y = f2.X
 GROUP BY f1.X, f1.Y
 HAVING COUNT(f1.X) > 1 or f1.X < f1.Y
 ORDER BY f1.X;
